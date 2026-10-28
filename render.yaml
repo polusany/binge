@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: binge
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /healthz
+    numInstances: 1
+    envVars:
+      - key: BINGE_ENV
+        value: production
+      - key: BINGE_HOST
+        value: 0.0.0.0
+      - key: BINGE_DATA_DIR
+        value: /var/data/binge
+      - key: BINGE_STORAGE_LIMIT_GB
+        value: "8"
+      - key: BINGE_SHOW_DEMO
+        value: "0"
+      - key: BINGE_ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: binge-data
+      mountPath: /var/data
+      sizeGB: 10
