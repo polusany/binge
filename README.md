@@ -55,3 +55,6 @@ The visitor action dialog offers Delete this visitor, Delete this record, Block 
 
 ## Notices and social media
 In BINGERET, open Notices & social media to write a notice and toggle its visibility. The live preview uses plain text; publish saves it to the database and displays it above the public page content. Add a Telegram, TikTok, X, Instagram, YouTube, Facebook or WhatsApp handle/profile link to show its social card near the public footer. Empty fields remain hidden. Enter WhatsApp numbers with a country code. Public links are restricted to HTTPS profiles on the corresponding platform. Settings persist across restarts; clear a profile or switch off a notice and publish again to remove it from the site.
+
+
+Uploads include rights metadata. Admins can select all-rights-reserved, CC0, or a Creative Commons 4.0 license, add required creator attribution, and provide the original HTTPS source. License details are displayed on public title pages and the reading library. Selecting a license does not grant rights; only publish content you own or are authorized to redistribute.

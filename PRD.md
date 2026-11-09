@@ -174,6 +174,8 @@ Selecting a section shows it on its own. The drawer highlights the active sectio
 | Season / episode | Required positive integers for series. |
 | Main file | Supported video, PDF or TXT according to kind. |
 | Poster | Optional JPG/JPEG, PNG or WebP. |
+| Usage license | All rights reserved / uploader has permission, CC0 or a selected CC 4.0 license. CC BY variants require creator attribution. |
+| Attribution / source | Optional original creator credit and HTTPS source link, shown with published content. |
 
 BINGERET can search uploaded content by title, author, genre, season or episode; filter by kind; see thumbnails and result counts; preview a file; and choose **Edit details**.
 

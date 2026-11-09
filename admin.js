@@ -2,6 +2,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let visitorRecords = [], selectedVisitorRecord = null, visitorDeleteBusy = false;
 let items = [], current = null, previewURL = '', episodeRows = [], busy = false, cachedPoster = '', seriesTemplate = null;
+function syncLicenseFields(){const license=$('#edit-form').elements.license.value,required=license.startsWith('cc-by');$('#edit-form').elements.attribution.required=required;$('#license-help').textContent=required?'Creative Commons requires creator credit. Add the creator and any required attribution before publishing.':'Confirm you have permission to publish this work under the selected rights.';}
 function syncSeries(){
   const f=$('#edit-form'), active=f.elements.kind.value==='video'&&f.elements.format.value==='Series', batch=active&&!current;
   $('#series-fields').hidden=!active;$('#series-help').hidden=!active;$('#episode-batch').hidden=!batch;
@@ -56,7 +57,8 @@ $('#bulk-episodes').onchange=()=>{
 function addEpisodes(item){
  edit(null);seriesTemplate=item;
  const form=$('#edit-form');
- for(const key of ['kind','title','description','genre','year','author','format','section','season'])form.elements.namedItem(key).value=item[key]??'';
+ for(const key of ['kind','title','description','genre','year','author','format','section','season','license','attribution','source_url'])form.elements.namedItem(key).value=item[key]??'';
+ syncLicenseFields();
  const existing=items.filter(x=>x.kind==='video'&&x.format==='Series'&&x.title===item.title&&Number(x.season)===Number(item.season));
  $('#episode-start').value=Math.max(0,...existing.map(x=>Number(x.episode)||0))+1;
  episodeRows=[];$('#episode-rows').replaceChildren();syncSeries();
@@ -70,6 +72,7 @@ $('#editor').addEventListener('cancel',event=>{if(busy)event.preventDefault();})
 function showPoster(url){$('#poster-preview').src=url;$('#poster-preview').hidden=!url;}
 $('#edit-form').elements.format.onchange=syncSeries;
 $('#edit-form').elements.kind.onchange=syncSeries;
+$('#edit-form').elements.license.onchange=syncLicenseFields;
 $('#poster-file').onchange=()=>{cachedPoster='';if(previewURL)URL.revokeObjectURL(previewURL);const file=$('#poster-file').files[0];previewURL=file?URL.createObjectURL(file):'';showPoster(previewURL|| (current?.poster_file&&!$('#remove-poster').checked?'/media/'+encodeURIComponent(current.poster_file):''));};
 $('#remove-poster').onchange=()=>{if(!$('#poster-file').files.length)showPoster($('#remove-poster').checked?'':current?.poster_file?'/media/'+encodeURIComponent(current.poster_file):'');};
 async function api(path,options={}) {
@@ -99,7 +102,7 @@ async function load(){
 async function boot(){try{const session=await api('/api/session');$('#status').textContent='';$('#login').hidden=session.authenticated;$('#dashboard').hidden=!session.authenticated;document.dispatchEvent(new CustomEvent('binge-admin-state',{detail:{authenticated:session.authenticated}}));if(session.authenticated){await load();document.dispatchEvent(new Event('binge-admin-ready'));}}catch(e){error(e);}}
 $('#login').onsubmit=async e=>{e.preventDefault();const button=e.target.querySelector('button');if(button.disabled)return;button.disabled=true;try{await api('/api/login',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});e.target.password.value='';$('#status').textContent='';await boot();}catch(e){error(e);}finally{button.disabled=false;}};
 $('#logout').onclick=async()=>{try{await api('/api/logout',{method:'POST'});await boot();}catch(e){error(e);}};
-function edit(item){seriesTemplate=null;current=item;episodeRows=[];cachedPoster='';$('#episode-rows').replaceChildren();$('#edit-form').reset();if(item)for(const [key,value]of Object.entries(item)){const field=$('#edit-form').elements.namedItem(key);if(field && key!=='file')field.value=value;}$('#editor-title').textContent=item?'Edit '+item.title:'Add content';$('#current-upload').hidden=!item;$('#current-upload').innerHTML=item?`<strong>Current upload</strong><p>${esc(item.title)}${item.season?` · Season ${esc(item.season)}, Episode ${esc(item.episode)}`:''}</p><a href="/media/${encodeURIComponent(item.file)}" target="_blank" rel="noopener">Preview current file ↗</a><p>You can save details without choosing a new file. Only choose a file below when replacing this upload.</p>`:'';$('#edit-status').textContent=item?'Current file: '+item.file:'';syncSeries(); showPoster(item?.poster_file ? '/media/'+encodeURIComponent(item.poster_file) : '');$('#remove-poster-wrap').hidden=!item?.poster_file;$('#remove-poster').checked=false;updateEpisodeSummary();$('#editor').showModal();}
+function edit(item){seriesTemplate=null;current=item;episodeRows=[];cachedPoster='';$('#episode-rows').replaceChildren();$('#edit-form').reset();if(item)for(const [key,value]of Object.entries(item)){const field=$('#edit-form').elements.namedItem(key);if(field && key!=='file')field.value=value;}$('#editor-title').textContent=item?'Edit '+item.title:'Add content';$('#current-upload').hidden=!item;$('#current-upload').innerHTML=item?`<strong>Current upload</strong><p>${esc(item.title)}${item.season?` · Season ${esc(item.season)}, Episode ${esc(item.episode)}`:''}</p><a href="/media/${encodeURIComponent(item.file)}" target="_blank" rel="noopener">Preview current file ↗</a><p>You can save details without choosing a new file. Only choose a file below when replacing this upload.</p>`:'';$('#edit-status').textContent=item?'Current file: '+item.file:'';syncLicenseFields();syncSeries(); showPoster(item?.poster_file ? '/media/'+encodeURIComponent(item.poster_file) : '');$('#remove-poster-wrap').hidden=!item?.poster_file;$('#remove-poster').checked=false;updateEpisodeSummary();$('#editor').showModal();}
 $('#new').onclick=()=>edit(null);
 $('#new-series').onclick=()=>{edit(null);$('#edit-form').elements.kind.value='video';$('#edit-form').elements.format.value='Series';syncSeries();$('#editor-title').textContent='Upload series episodes';};$('#close').onclick=()=>{if(!busy)$('#editor').close();};
 $('#items').onclick=async e=>{const b=e.target.closest('button');if(!b)return;try{if(b.dataset.edit)edit(items.find(x=>x.id===b.dataset.edit));if(b.dataset.addEpisodes)addEpisodes(items.find(x=>x.id===b.dataset.addEpisodes));if(b.dataset.delete&&confirm('Delete this title and its uploaded file?')){await api('/api/content/'+b.dataset.delete,{method:'DELETE'});notifyCatalog();await load();}}catch(e){error(e);}};
@@ -161,6 +164,7 @@ $('#edit-form').onsubmit=async e=>{
   const poster=$('#poster-file').files[0], file=$('#file').files[0];
   const progress=message=>{$('#edit-status').textContent=message;};
   try{
+    if(v.source_url&&!/^https:\/\//i.test(v.source_url))throw Error('Use an HTTPS link for the original source.');
     if(batch){
       if(Number($('#episode-count').value)!==episodeRows.length)throw Error('The episode count does not match the upload rows. Click Set episode uploads first.');
       EpisodeUploads.validate(episodeRows);

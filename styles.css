@@ -1,17 +1,17 @@
 :root {
-  color-scheme: dark;
-  --green-950: #0d2119;
-  --green-900: #12382a;
-  --green-800: #174936;
-  --green-700: #236348;
-  --green-500: #548269;
-  --gold: #d9b85c;
-  --gold-light: #eed991;
-  --white: #f5f6ef;
-  --paper: #e5e8dd;
-  --muted: #a6b0a6;
-  --line: rgba(235, 241, 227, .13);
-  --surface: #14271f;
+  color-scheme: light;
+  --green-950: #ECEFEF;
+  --green-900: #164E63;
+  --green-800: #245f72;
+  --green-700: #164E63;
+  --green-500: #3b8292;
+  --gold: #06B6D4;
+  --gold-light: #06B6D4;
+  --white: #173e4c;
+  --paper: #355b68;
+  --muted: #607b83;
+  --line: rgba(22, 78, 99, .16);
+  --surface: #E8EFF1;
   --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 * { box-sizing: border-box; }
@@ -209,3 +209,190 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @media(max-width:620px){.comments-section{margin-top:28px;padding-top:20px}.comment-form-footer{align-items:flex-start;flex-direction:column}.comment-form .gold-button{width:100%;justify-content:center}}
 
 .community-comments{max-width:1260px;margin:72px auto 76px;padding:38px 42px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,rgba(18,56,42,.92),rgba(7,21,15,.96));scroll-margin-top:30px}.community-comments-heading{margin-bottom:30px}.community-comments-heading h2{font:500 clamp(30px,4vw,42px) Georgia,serif;color:var(--white);margin:8px 0 10px}.community-comments-heading>p:last-child{margin:0;color:var(--muted);line-height:1.65}.community-comments>.comments-heading h3{font:500 21px Georgia,serif;color:var(--gold-light);margin:0 0 14px}@media(max-width:1320px){.community-comments{margin-left:5%;margin-right:5%}}@media(max-width:620px){.community-comments{margin-top:45px;margin-bottom:50px;padding:26px 18px}.community-comments-heading{margin-bottom:24px}}
+
+/* Light theme refinements for fixed-color surfaces. */
+.topbar,.site-footer{background:#fff}
+.category-nav{border-top-color:var(--line)}
+.category-link,.quiet-link,.filter-chip,.sort-wrap,.footer-inner p,.footer-inner>span{color:var(--paper)}
+.category-link:hover,.category-link[aria-current="page"],.quiet-link:hover{color:var(--green-700)}
+.brand-mark{color:var(--green-700)}
+.search-form{border-color:var(--line);background:#f6f8f5}
+.search-form input,.sort-wrap select{color:var(--white)}
+.search-form input::placeholder{color:var(--muted)}
+.menu-panel{background:#fff;box-shadow:-18px 0 50px rgba(20,45,28,.16)}
+.menu-links a,.menu-close{color:var(--paper)}
+.menu-links a:hover,.menu-links a[aria-current="page"]{color:var(--green-700)}
+.hero{background:linear-gradient(105deg,#edf4ed 0%,#f7f8f2 66%,#e5efe6 100%)}
+.hero-copy{color:#536258}.hero-index{color:#65776a}
+.hero h1 em,.genre-directory-heading h2 em{color:var(--green-700)}
+.gold-button{color:#fff;background:var(--green-700);border-color:var(--green-700)}
+.gold-button:hover{background:#285a3c}
+.filter-chip{border-color:var(--line)}
+.filter-chip:hover,.filter-chip.active{color:#fff;background:var(--green-700);border-color:var(--green-700)}
+.sort-wrap select,.sort-wrap option{background:#fff}
+.movie-title{color:var(--white)}
+.movie-year,.movie-meta,.genre-card-copy small{color:var(--muted)}
+.genre-card{background:linear-gradient(120deg,#fff,#f1f6f1)}
+.genre-card:hover,.genre-card:focus-visible{background:#e8f0e9}
+.empty-state h3{color:var(--white)}
+.movie-dialog{color:var(--white);background:#fff;box-shadow:0 25px 100px rgba(20,40,25,.28)}
+.movie-dialog::backdrop{background:rgba(24,42,29,.48)}
+.dialog-close{color:var(--white);border-color:var(--line);background:rgba(255,255,255,.9)}
+.dialog-kicker,.dialog-content h2,.episode-player h3,.series-browser h3,.comments-heading h3{color:var(--green-700)}
+.dialog-meta,.dialog-description,.dialog-note,.player-placeholder{color:var(--paper)}
+.player-placeholder{background:#f5f8f5}.episode-player video{background:#eef2ee}
+.season-block summary{color:var(--green-700)}.series-episode-row button{color:var(--paper)}.series-episode-row a{color:var(--green-700)}
+.comment-item,.comment-empty{background:#f7f9f7}
+.comment-meta strong,.comment-item p,.comment-form label{color:var(--white)}
+.comment-form input,.comment-form textarea{color:var(--white);background:#fff}
+.comment-form input::placeholder,.comment-form textarea::placeholder{color:var(--muted)}
+.comment-status{color:var(--green-700)}
+.public-notice{background:linear-gradient(110deg,#fbf7e9,#f1f6f1)}
+.public-notice h2{color:var(--white)}
+.public-social{background:linear-gradient(120deg,#f4f7f3,#e9f1ea)}
+.social-card{background:#fff}.social-card:hover{background:#f4f7f3}
+.community-comments{background:linear-gradient(135deg,#f0f5f0,#fff)}
+.community-comments-heading h2{color:var(--white)}
+
+/* Palette from the user's reference: deep teal, cyan and ice. */
+:root { --surface: #E8EFF1; }
+.topbar,.site-footer { background: #164E63; }
+.topbar .brand,.topbar .category-link,.footer-inner .brand,.footer-inner p,.footer-inner>span { color: #ECEFEF; }
+.topbar .brand-mark { color: #06B6D4; border-color: #06B6D4; }
+.topbar .brand-mark::after { border-color: rgba(6,182,212,.48); }
+.category-nav { border-top-color: rgba(236,239,239,.16); }
+.category-link:hover,.category-link[aria-current="page"] { color: #06B6D4; }
+.category-link[aria-current="page"]::after { background: #06B6D4; }
+.search-form { border-color: rgba(236,239,239,.35); background: rgba(255,255,255,.08); color: #ECEFEF; }
+.search-form input { color: #fff; }
+.search-form input::placeholder { color: rgba(236,239,239,.72); }
+.search-icon { color: #06B6D4; }
+.menu-toggle { border-color: rgba(6,182,212,.7); }
+.menu-toggle span { background: #06B6D4; }
+.menu-panel { background: #164E63; border-left-color: #06B6D4; }
+.menu-panel-head p,.menu-links a,.menu-close { color: #ECEFEF; }
+.menu-links a:hover,.menu-links a[aria-current="page"] { color: #06B6D4; border-color: rgba(6,182,212,.42); background: rgba(6,182,212,.12); }
+.menu-links a::before { color: #06B6D4; }
+.hero { background: linear-gradient(110deg,#ECEFEF 0%,#f7fafa 68%,#dff5f7 100%); }
+.hero h1 em,.genre-directory-heading h2 em { color: #164E63; }
+.hero-kicker,.section-kicker,.notice-eyebrow { color: #087b91; }
+.hero-copy { color: #355b68; }
+.hero-index { color: rgba(22,78,99,.65); }
+.gold-button,.filter-chip:hover,.filter-chip.active { color: #083b4b; background: #06B6D4; border-color: #06B6D4; }
+.gold-button:hover { background: #35c7dd; }
+.filter-chip { color: #355b68; border-color: var(--line); }
+.filter-chip:hover,.filter-chip.active { color: #083b4b; }
+.sort-wrap select,.sort-wrap option { color: #173e4c; background: #fff; }
+.genre-card { border-color: var(--line); color: #173e4c; background: linear-gradient(120deg,#fff,#f2f9f9); }
+.genre-card:hover,.genre-card:focus-visible { border-color: rgba(6,182,212,.65); background: #e2f8fa; }
+.genre-card-number,.genre-card-arrow,.clear-button { color: #087b91; }
+.movie-dialog { border-color: rgba(22,78,99,.25); }
+.dialog-kicker,.dialog-content h2,.episode-player h3,.series-browser h3,.comments-heading h3,.series-episode-row a { color: #164E63; }
+.dialog-close { border-color: rgba(22,78,99,.2); }
+.season-block summary { color: #164E63; background: rgba(6,182,212,.1); }
+.series-episode-row.playing { background: rgba(6,182,212,.11); }
+.comment-form input:focus,.comment-form textarea:focus { outline-color: rgba(6,182,212,.38); border-color: #06B6D4; }
+.comment-status { color: #087b91; }
+.public-notice { border-color: rgba(6,182,212,.35); border-left-color: #06B6D4; background: linear-gradient(110deg,#e8f9fa,#f8fbfb); }
+.public-social { background: linear-gradient(120deg,#e8f7f8,#f8fbfb); }
+.social-card { border-color: rgba(22,78,99,.15); }
+.social-card:hover { border-color: #06B6D4; background: #eefbfc; }
+.social-icon { color: #087b91; background: rgba(6,182,212,.13); }
+.community-comments { border-color: rgba(22,78,99,.16); background: linear-gradient(135deg,#e4f5f6,#ffffff); }
+.community-comments>.comments-heading h3 { color: #164E63; }
+
+/* Refined professional finish: soft blue-teal canvas, restrained cyan accents. */
+:root {
+  --green-950: #DCE8EB;
+  --green-900: #164E63;
+  --green-800: #245B6D;
+  --green-700: #164E63;
+  --green-500: #4F8290;
+  --white: #123B49;
+  --paper: #355864;
+  --muted: #5C7580;
+  --line: rgba(22,78,99,.18);
+  --surface: #E8EFF1;
+}
+body { background: #DCE8EB; color: #123B49; }
+.topbar,.site-footer { background: #164E63; }
+.hero { background: linear-gradient(112deg,#164E63 0%,#1C5D70 68%,#267286 100%); color: #ECEFEF; }
+.hero h1,.hero h1 em { color: #ECEFEF; }
+.hero h1 em { text-decoration: underline; text-decoration-color: #06B6D4; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+.hero-kicker { color: #75D9E8; }
+.hero-copy { color: #D1E2E6; }
+.hero-index { color: rgba(236,239,239,.72); }
+.catalog,.genre-directory { color: #123B49; }
+.catalog-heading h2,.genre-directory-heading h2 { color: #123B49; }
+.catalog-heading h2 em,.genre-directory-heading h2 em { color: #087F96; }
+.section-kicker { color: #087F96; }
+.catalog-tools { border-color: rgba(22,78,99,.2); }
+.filter-chip { color: #355864; background: rgba(236,239,239,.52); }
+.filter-chip:hover,.filter-chip.active { color: #073D4C; background: #06B6D4; border-color: #06B6D4; }
+.sort-wrap select,.sort-wrap option { color: #123B49; background: #E8EFF1; }
+.movie-card-info,.movie-title { color: #123B49; }
+.movie-year,.movie-meta { color: #5C7580; }
+.poster { border-color: rgba(22,78,99,.18); border-radius: 8px; box-shadow: 0 5px 16px rgba(22,78,99,.08); }
+.movie-card:hover .poster,.movie-card:focus-visible .poster { border-color: rgba(6,182,212,.85); box-shadow: 0 14px 28px rgba(22,78,99,.18); }
+.genre-card { color: #123B49; background: #E8EFF1; border-color: rgba(22,78,99,.15); border-radius: 8px; }
+.genre-card:hover,.genre-card:focus-visible { background: #D2E8EC; border-color: #06B6D4; }
+.menu-panel { background: #164E63; }
+.menu-links a { color: #ECEFEF; }
+.menu-links a:hover,.menu-links a[aria-current="page"] { color: #75D9E8; }
+.search-form { background: rgba(236,239,239,.1); border-color: rgba(236,239,239,.28); }
+.menu-toggle { border-color: rgba(6,182,212,.6); background: rgba(6,182,212,.08); }
+.gold-button { color: #073D4C; background: #06B6D4; border: 0; border-radius: 6px; box-shadow: 0 4px 12px rgba(6,182,212,.16); }
+.gold-button:hover { background: #38C7DC; }
+.movie-dialog { color: #123B49; background: #E8EFF1; border-color: rgba(22,78,99,.22); border-radius: 12px; }
+.movie-dialog::backdrop { background: rgba(9,43,55,.56); }
+.dialog-content h2,.dialog-kicker,.episode-player h3,.series-browser h3,.comments-heading h3 { color: #164E63; }
+.dialog-description,.dialog-meta,.dialog-note { color: #355864; }
+.dialog-close { color: #164E63; background: #DCE8EB; border-color: rgba(22,78,99,.2); border-radius: 6px; }
+.player-placeholder,.season-block,.comment-item,.comment-empty { color: #355864; background: #DCE8EB; }
+.season-block summary { color: #164E63; background: rgba(6,182,212,.12); }
+.series-episode-row.playing { background: rgba(6,182,212,.14); }
+.series-episode-row button { color: #164E63; border-radius: 5px; }
+.comment-form label,.comment-meta strong,.comment-item p { color: #123B49; }
+.comment-form input,.comment-form textarea { color: #123B49; background: #DCE8EB; border-color: rgba(22,78,99,.22); border-radius: 6px; }
+.comment-form input::placeholder,.comment-form textarea::placeholder { color: #69828B; }
+.comment-form input:focus,.comment-form textarea:focus { border-color: #06B6D4; outline: 2px solid rgba(6,182,212,.22); }
+.community-comments { background: linear-gradient(135deg,#D2E3E7,#E4ECEE); border-color: rgba(22,78,99,.16); border-radius: 14px; box-shadow: 0 12px 32px rgba(22,78,99,.06); }
+.community-comments-heading h2 { color: #164E63; }
+.community-comments-heading>p:last-child { color: #4C6873; }
+.public-social { background: #D2E3E7; border-radius: 14px; }
+.social-card { background: #E6EEF0; border-color: rgba(22,78,99,.13); border-radius: 10px; }
+.social-card:hover { background: #D9EAED; border-color: #06B6D4; }
+.social-icon { color: #087F96; background: rgba(6,182,212,.13); }
+.public-notice { background: #E8EFF1; border-radius: 10px; }
+.footer-inner p,.footer-inner>span { color: #D1E2E6; }
+.empty-state { color: #5C7580; }
+.empty-state h3 { color: #164E63; }
+.topbar-tools .menu-toggle { border-color: rgba(6,182,212,.7); background: rgba(6,182,212,.12); }
+
+/* Keep the movie detail dialog in its original presentation. */
+.movie-dialog {
+  color: #F5F6EF;
+  background: #164E63;
+  border: 1px solid rgba(217,184,92,.48);
+  border-radius: 4px;
+  box-shadow: 0 25px 100px rgba(0,0,0,.55);
+}
+.movie-dialog::backdrop { background: rgba(3,12,8,.78); backdrop-filter: blur(5px); }
+.dialog-content h2 { color: #F5F6EF; }
+.dialog-kicker { color: #06B6D4; }
+.dialog-meta { color: #C0CCC0; }
+.dialog-description { color: #D5DDD3; }
+.dialog-note { color: #A2B0A4; }
+.dialog-close {
+  color: #fff;
+  border-color: rgba(255,255,255,.3);
+  border-radius: 0;
+  background: rgba(12,32,23,.68);
+}
+.player-placeholder,.season-block,.comment-item,.comment-empty {
+  color: #C4CEC3;
+  background: rgba(8,26,18,.7);
+}
+.episode-player video { background: #07150F; }
+.series-episode-row button { color: #F5F6EF; border-radius: 4px; }
+.license-details{display:grid;justify-items:start;gap:7px;margin:18px 0;padding:14px 16px;border-left:2px solid var(--gold);background:rgba(217,184,92,.06);font-size:12px;color:var(--muted)}.license-details strong{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light)}.license-details a,.book-license a{color:var(--gold-light)}.book-license{font-size:11px;line-height:1.6;color:var(--muted);overflow-wrap:anywhere}

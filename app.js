@@ -39,6 +39,8 @@ const movies = [
 ];
 
 const root = document.body.dataset.root || "";
+const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function licenseMarkup(item){const id=item.license||'all-rights-reserved',labels={'all-rights-reserved':'All rights reserved','cc0':'CC0 1.0','cc-by-4.0':'CC BY 4.0','cc-by-sa-4.0':'CC BY-SA 4.0','cc-by-nd-4.0':'CC BY-ND 4.0','cc-by-nc-4.0':'CC BY-NC 4.0','cc-by-nc-sa-4.0':'CC BY-NC-SA 4.0','cc-by-nc-nd-4.0':'CC BY-NC-ND 4.0'},urls={cc0:'https://creativecommons.org/publicdomain/zero/1.0/','cc-by-4.0':'https://creativecommons.org/licenses/by/4.0/','cc-by-sa-4.0':'https://creativecommons.org/licenses/by-sa/4.0/','cc-by-nd-4.0':'https://creativecommons.org/licenses/by-nd/4.0/','cc-by-nc-4.0':'https://creativecommons.org/licenses/by-nc/4.0/','cc-by-nc-sa-4.0':'https://creativecommons.org/licenses/by-nc-sa/4.0/','cc-by-nc-nd-4.0':'https://creativecommons.org/licenses/by-nc-nd/4.0/'};const label=labels[id]||labels['all-rights-reserved'],license=urls[id]?`<a href="${urls[id]}" target="_blank" rel="noopener">${label} ↗</a>`:label,attribution=item.attribution?`<span>Credit: ${escapeHTML(item.attribution)}</span>`:'',source=item.source_url?`<a href="${escapeHTML(item.source_url)}" target="_blank" rel="noopener">Original source ↗</a>`:'';return `<section class="license-details"><strong>Rights &amp; license</strong><span>${license}</span>${attribution}${source}</section>`;}
 const currentCategory = document.body.dataset.category || "all";
 const header = document.querySelector("#site-header");
 const content = document.querySelector("#page-content");
@@ -177,13 +179,12 @@ function openMovie(movieId) {
     <div class="dialog-content"><p class="dialog-kicker">${categories.find(item => item.id === movie.section)?.label.toUpperCase() || 'BINGE COLLECTION'}</p>
       <h2 id="dialog-title">${movie.title}</h2><p class="dialog-meta">${movie.year} · ${movie.genre} · ${movie.format}${grouped ? ` · ${movie.seasons.length} ${movie.seasons.length === 1 ? 'season' : 'seasons'} · ${movie.episodes.length} episodes` : ''}</p>
       <p class="dialog-description">${movie.description}</p>
+      ${licenseMarkup(movie)}
       ${first.file ? `<section class="episode-player" aria-labelledby="playing-label"><h3 id="playing-label">${grouped ? `Season ${first.season} · Episode ${first.episode}` : movie.title}</h3><video id="title-player" ${movie.poster_file ? `poster="/media/${encodeURIComponent(movie.poster_file)}"` : ''} controls preload="metadata" src="/media/${encodeURIComponent(first.file)}" aria-label="${grouped ? `Season ${first.season} episode ${first.episode}` : movie.title}"></video><a id="active-download" class="gold-button" href="/media/${encodeURIComponent(first.file)}?download=1" download>${grouped ? `Download S${first.season} E${first.episode}` : 'Download video'} ↓</a></section>` : `<div class="player-placeholder"><span class="play-icon">▶</span><span>Video source not added yet</span></div>`}
       ${grouped ? `<section class="series-browser" aria-label="Seasons and episodes"><h3>Seasons & episodes</h3><p class="dialog-note">Choose a season, then watch or download an episode.</p>${BingeCatalog.episodeMarkup(movie)}</section>` : ''}
-      <section class="comments-section" aria-labelledby="movie-comments-title"><div class="comments-heading"><h3 id="movie-comments-title">Comments</h3><span class="comments-count">Loading…</span></div><ol class="comment-list" aria-live="polite"></ol><form class="comment-form"><label for="movie-comment-name">Your name</label><input id="movie-comment-name" name="name" maxlength="60" autocomplete="name" required placeholder="Name shown with your comment"><label for="movie-comment-body">Join the conversation</label><textarea id="movie-comment-body" name="body" maxlength="1200" rows="4" required placeholder="Share your thoughts about this title…"></textarea><div class="comment-form-footer"><span>Be respectful. Up to 1,200 characters.</span><button class="gold-button" type="submit">Post comment</button></div><p class="comment-status" role="status" aria-live="polite"></p></form></section>
       <p class="dialog-note">${first.file ? 'Downloads save to the location configured in your browser.' : 'This is a fictional demo title. No video is attached.'}</p>
     </div>`;
   dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
-  setupComments(dialog,movie.id);
   if (grouped) {
     function highlight(id) {
       dialog.querySelectorAll('[data-watch]').forEach(button => {

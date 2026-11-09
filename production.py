@@ -44,7 +44,7 @@ def create_app(config=None):
         CREATE INDEX IF NOT EXISTS visits_seen ON visits(seen);''')
         conn.execute('CREATE INDEX IF NOT EXISTS comments_content_created ON comments(content_id,created_at DESC)')
         columns={r[1] for r in conn.execute('PRAGMA table_info(content)')}
-        for name,definition in [('poster_file',"TEXT DEFAULT ''"),('season','INTEGER'),('episode','INTEGER')]:
+        for name,definition in [('poster_file',"TEXT DEFAULT ''"),('season','INTEGER'),('episode','INTEGER'),('license',"TEXT DEFAULT 'all-rights-reserved'"),('attribution',"TEXT DEFAULT ''"),('source_url',"TEXT DEFAULT ''")]:
             if name not in columns:conn.execute(f'ALTER TABLE content ADD COLUMN {name} {definition}')
         if not conn.execute("SELECT 1 FROM settings WHERE key='password'").fetchone():
             password=app.config['ADMIN_PASSWORD']
@@ -232,6 +232,13 @@ def create_app(config=None):
         if not 1888<=year<=2200 or (season is not None and not (1<=season<=9999 and 1<=episode<=9999)):abort(400,description='Invalid year, season or episode.')
         section=value.get('section','movies')
         if section not in SECTIONS:abort(400,description='Select a valid collection.')
+        license_id=str(value.get('license','all-rights-reserved'))
+        attribution=str(value.get('attribution','')).strip()[:500]
+        source_url=str(value.get('source_url','')).strip()[:500]
+        licenses={'all-rights-reserved','cc0','cc-by-4.0','cc-by-sa-4.0','cc-by-nd-4.0','cc-by-nc-4.0','cc-by-nc-sa-4.0','cc-by-nc-nd-4.0'}
+        if license_id not in licenses:abort(400,description='Select a valid rights or Creative Commons license.')
+        if license_id.startswith('cc-by') and not attribution:abort(400,description='Add the creator or required attribution for this Creative Commons license.')
+        if source_url and (not re.fullmatch(r'https://[^\s]+',source_url,re.I) or not urlsplit(source_url).netloc):abort(400,description='The source link must be a valid HTTPS URL.')
         ident=value.get('id') or secrets.token_hex(12)
         if not isinstance(ident,str) or not re.fullmatch(r'[a-zA-Z0-9_-]{1,80}',ident):abort(400,description='Invalid record ID.')
         with write_lock,db() as conn:
@@ -239,7 +246,7 @@ def create_app(config=None):
             same=conn.execute('SELECT id FROM content WHERE file=? AND id<>?',(filename,ident)).fetchone()
             if same:return jsonify(id=same['id'])
             if season is not None and conn.execute("SELECT id FROM content WHERE kind='video' AND format='Series' AND lower(trim(title))=lower(?) AND section=? AND season=? AND episode=? AND id<>?",(title,section,season,episode,ident)).fetchone():abort(409,description=f'Season {season}, episode {episode} already exists. Edit it instead.')
-            conn.execute('INSERT OR REPLACE INTO content(id,kind,title,description,genre,section,format,year,author,file,extension,poster_file,season,episode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)',(ident,kind,title,str(value.get('description',''))[:10000],str(value.get('genre','Drama'))[:60],section,'Series' if season else 'Movie',year,str(value.get('author',''))[:200],filename,Path(filename).suffix,poster,season,episode))
+            conn.execute('INSERT OR REPLACE INTO content(id,kind,title,description,genre,section,format,year,author,file,extension,poster_file,season,episode,license,attribution,source_url) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',(ident,kind,title,str(value.get('description',''))[:10000],str(value.get('genre','Drama'))[:60],section,'Series' if season else 'Movie',year,str(value.get('author',''))[:200],filename,Path(filename).suffix,poster,season,episode,license_id,attribution,source_url))
             if old:
                 for previous in (old['file'],old['poster_file']):
                     if previous not in {filename,poster}:cleanup_file(conn,previous)
